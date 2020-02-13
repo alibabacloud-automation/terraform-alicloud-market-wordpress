@@ -1,10 +1,10 @@
-Terraform Module for creating Wordpress based on Alibaba Cloud market place image.  
+Terraform Module for creating Wordpress based on Alibaba Cloud market place image and attach ECS to SLB. 
 terraform-alicloud-market-wordpress
 -------
 
 English | [简体中文](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/blob/master/README-CN.md)
 
-Terraform Module used to create ECS Instance based on Alibaba Cloud market place image to startup wordpress.  
+Terraform Module used to create ECS Instance based on Alibaba Cloud market place image and attach ECS to SLB, if domain_name exits, will associate SLB with domain. 
 
 ## Terraform versions
 
@@ -21,10 +21,19 @@ module "market-wordpress" {
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = "ecs.sn1ne.large"
   system_disk_category       = "cloud_efficiency"
-  security_group_ids         = ["sg-45678"]
-  vswitch_id                 = "vsw-345678"
+  security_group_ids         = ["sg-45678xxx"]
+  vswitch_id                 = "vsw-345678xxx"
   internet_max_bandwidth_out = 50
-  image_id = "m-2ze69pmuxxxxxxx"
+  image_id                   = "m-2ze69pmuxxxxxxx"
+  slb_name                   = "slb_wordpress"
+  internal                   = true
+  bandwidth                  = 5
+  spec                       = "slb.s1.small"
+  frontend_port              = 80
+  protocol                   = "http"
+  domain_name                = "cloudxxxx.xxx"
+  host_record                = "wordpress"
+  type                       = "A"
 }  
 ```
 

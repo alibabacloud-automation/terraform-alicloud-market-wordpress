@@ -1,7 +1,7 @@
 terraform-alicloud-market-wordpress
 =====================================================================
 
-本 Terraform 模块将使用 Wordpress 镜像来创建 ECS 实例，此实例用来启动 Wordpress。
+本 Terraform 模块将使用 Wordpress 镜像来创建 ECS 实例，并将实例绑定到 SLB，如果域名变量存在，则会将域名与 SLB 关联。
 
 ## Terraform 版本
 
@@ -18,10 +18,19 @@ module "market-wordpress" {
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = "ecs.sn1ne.large"
   system_disk_category       = "cloud_efficiency"
-  security_group_ids         = ["sg-45678"]
-  vswitch_id                 = "vsw-345678"
+  security_group_ids         = ["sg-45678xxx"]
+  vswitch_id                 = "vsw-345678xxx"
   internet_max_bandwidth_out = 50
   image_id                   = "m-2ze69pmuxxxxxxx"
+  slb_name                   = "slb_wordpress"
+  internal                   = true
+  bandwidth                  = 5
+  spec                       = "slb.s1.small"
+  frontend_port              = 80
+  protocol                   = "http"
+  domain_name                = "cloudxxxx.xxx"
+  host_record                = "wordpress"
+  type                       = "A"
 }  
 ```
 
@@ -31,8 +40,7 @@ module "market-wordpress" {
 
 ## 注意事项
 
-* This module using AccessKey and SecretKey are from `profile` and `shared_credentials_file`.
-If you have not set them yet, please install [aliyun-cli](https://github.com/aliyun/aliyun-cli#installation) and configure it.
+* 本 Module 使用的 AccessKey 和 SecretKey 可以直接从 `profile` 和 `shared_credentials_file` 中获取。如果未设置，可通过下载安装 [aliyun-cli](https://github.com/aliyun/aliyun-cli#installation) 后进行配置。
 
 作者
 -------

@@ -21,6 +21,7 @@ variable "skip_region_validation" {
   default     = false
 }
 
+
 // ECS instance
 variable "ecs_instance_name" {
   description = "The name of ECS Instance."
@@ -95,7 +96,7 @@ variable "deletion_protection" {
 }
 
 variable "tags" {
-  description = "A mapping of tags to assign to the ECS and RDS Instance."
+  description = "A mapping of tags to assign to the ECS and SLB."
   type        = map(string)
   default     = {}
 }
@@ -105,3 +106,73 @@ variable "resource_group_id" {
   type        = string
   default     = ""
 }
+
+// SLB
+variable "create_slb" {
+  description = "Whether to create slb."
+  type        = bool
+  default     = false
+}
+
+variable "slb_name" {
+  description = "The name of a new load balancer."
+  type        = string
+  default     = "module-slb"
+}
+
+variable "slb_internet_charge_type" {
+  description = "The charge type of load balancer instance internet network."
+  type        = string
+  default     = "PayByTraffic"
+}
+
+variable "bandwidth" {
+  description = "The load balancer instance bandwidth."
+  type        = number
+  default     = 10
+}
+
+variable "spec" {
+  description = "The specification of the SLB instance."
+  type        = string
+  default     = ""
+}
+
+variable "frontend_port" {
+  description = "Port used by the Server Load Balancer instance frontend."
+  type        = number
+  default     = 80
+}
+
+variable "protocol" {
+  description = "The protocol to listen on. Valid values are [http, https, tcp, udp]."
+  type        = string
+  default     = "http"
+}
+
+// DNS
+variable "bind_domain" {
+  description = "Whether to bind domain."
+  type        = bool
+  default     = false
+}
+
+variable "domain_name" {
+  description = "The name of domain."
+  type        = string
+  default     = ""
+}
+
+variable "host_record" {
+  description = "Host record for the domain record."
+  type        = string
+  default     = ""
+}
+
+variable "type" {
+  description = "The type of domain record."
+  type        = string
+  default     = ""
+}
+
+
