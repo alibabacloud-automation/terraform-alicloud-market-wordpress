@@ -21,8 +21,8 @@ resource "alicloud_instance" "this" {
   system_disk_category        = var.system_disk_category
   system_disk_size            = var.system_disk_size
 
-  vswitch_id                  =  var.vswitch_id
-  private_ip                  =  var.private_ip
+  vswitch_id                  = var.vswitch_id
+  private_ip                  = var.private_ip
 
   internet_charge_type        = var.internet_charge_type
   internet_max_bandwidth_out  = var.internet_max_bandwidth_out
@@ -33,7 +33,48 @@ resource "alicloud_instance" "this" {
   tags = merge(
   {
     Created     = "Terraform"
-    Application = "Wordpress"
+    Application = "Market-Wordpress"
   }, var.tags,
   )
+}
+
+
+resource "alicloud_slb" "this"{
+  count             = var.create_slb == true ? 1 : 0
+  name              = var.slb_name
+  address_type      = "internet"
+  vswitch_id        = var.vswitch_id
+  specification     = var.spec
+  bandwidth         = var.bandwidth
+  tags=merge(
+  {
+    Created     = "Terraform"
+    Application = "Market-Wordpress"
+  }, var.tags,
+  )
+}
+
+resource "alicloud_slb_server_group" "this" {
+  count             = var.create_slb == true ? 1 : 0
+  load_balancer_id  = alicloud_slb.this.*.id[0]
+  servers {
+    server_ids = alicloud_instance.this.*.id
+    port       = 80
+  }
+}
+
+resource "alicloud_slb_listener" "this" {
+  count               = var.create_slb == true ? 1 : 0
+  frontend_port       = var.frontend_port
+  load_balancer_id    = alicloud_slb.this.*.id[0]
+  protocol            = var.protocol
+  server_group_id     = alicloud_slb_server_group.this.*.id[0]
+}
+
+resource "alicloud_dns_record" "record" {
+  count       = var.bind_domain == true ? 1 : 0
+  name        = var.domain_name
+  host_record = var.host_record
+  type        = var.type
+  value       = alicloud_slb.this.*.address[0]
 }

@@ -23,5 +23,7 @@ Note that this example may create resources which cost money. Run `terraform des
 |------|-------------|
 this_ecs_instance_public_ip
 | this\_ecs\_instance\_public\_ip | The public ip of ecs instance |
+| this\_slb\_address | The address of SLB |
+| this\_domain\_address | The address of domain |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
