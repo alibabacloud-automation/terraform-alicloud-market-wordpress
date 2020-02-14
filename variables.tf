@@ -21,8 +21,24 @@ variable "skip_region_validation" {
   default     = false
 }
 
+// Market Product
+variable "product_keyword" {
+  description = "The name keyword of Market Product used to fetch the specified product image."
+  type        = string
+  default     = "Wordpress平台"
+}
 
 // ECS instance
+variable "create_instance" {
+  description = "Whether to create ecs instance."
+  type        = bool
+  default     = true
+}
+variable "allocate_public_ip" {
+  description = "Whether to allocate public ip for ECS instance. If 'create_slb' is true, it will be ignore."
+  type        = bool
+  default     = false
+}
 variable "ecs_instance_name" {
   description = "The name of ECS Instance."
   type        = string
@@ -34,7 +50,7 @@ variable "ecs_instance_password" {
   default     = ""
 }
 variable "image_id" {
-  description = "The image id used to launch one ecs instance. It only support CentOS_7."
+  description = "The image id used to launch one ecs instance. If not set, a fetched market place image by product_keyword will be used."
   type        = string
   default     = ""
 }
@@ -46,7 +62,7 @@ variable "ecs_instance_type" {
 variable "system_disk_category" {
   description = "The system disk category used to launch one ecs instance."
   type        = string
-  default     = ""
+  default     = "cloud_ssd"
 }
 variable "system_disk_size" {
   description = "The system disk size used to launch ecs instance."
@@ -54,12 +70,12 @@ variable "system_disk_size" {
   default     = 40
 }
 variable "security_group_ids" {
-  description = "A list of security group ids to associate with ECS and RDS Mysql Instance."
+  description = "A list of security group ids to associate with ECS Instance."
   type        = list(string)
   default     = []
 }
 variable "vswitch_id" {
-  description = "The virtual switch ID to launch ECS and RDS MySql instance in VPC."
+  description = "The virtual switch ID to launch ECS instance in VPC."
   type        = string
   default     = ""
 }
@@ -109,7 +125,7 @@ variable "resource_group_id" {
 
 // SLB
 variable "create_slb" {
-  description = "Whether to create slb."
+  description = "Whether to create a slb instance and attach the Ecs instance. If true, a new Slb instance and listener will be created and the Ecs instance will be attached to the Slb."
   type        = bool
   default     = false
 }
@@ -136,18 +152,6 @@ variable "spec" {
   description = "The specification of the SLB instance."
   type        = string
   default     = ""
-}
-
-variable "frontend_port" {
-  description = "Port used by the Server Load Balancer instance frontend."
-  type        = number
-  default     = 80
-}
-
-variable "protocol" {
-  description = "The protocol to listen on. Valid values are [http, https, tcp, udp]."
-  type        = string
-  default     = "http"
 }
 
 // DNS

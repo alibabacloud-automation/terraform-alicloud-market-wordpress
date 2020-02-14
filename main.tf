@@ -10,8 +10,24 @@ data "alicloud_regions" "this" {
   current = true
 }
 
+data "alicloud_market_products" "products"{
+  search_term   = var.product_keyword
+  product_type  = "MIRROR"
+}
+
+data "alicloud_market_product" "product"{
+  product_code = data.alicloud_market_products.products.products.0.code
+}
+
+locals {
+  create_slb          = var.create_instance == false ? false : var.create_slb
+  allocate_public_ip  = var.create_instance == false ? false : local.create_slb == true ? false : var.allocate_public_ip
+  bind_domain         = local.create_slb == true ? var.bind_domain : local.allocate_public_ip == false ? false : var.bind_domain
+}
+
 resource "alicloud_instance" "this" {
-  image_id                    = var.image_id
+  count                       = var.create_instance == true ? 1 : 0
+  image_id                    = var.image_id != "" ? var.image_id : data.alicloud_market_product.product.product.0.skus.0.images.11.image_id
   instance_type               = var.ecs_instance_type
   security_groups             = var.security_group_ids
 
@@ -25,7 +41,8 @@ resource "alicloud_instance" "this" {
   private_ip                  = var.private_ip
 
   internet_charge_type        = var.internet_charge_type
-  internet_max_bandwidth_out  = var.internet_max_bandwidth_out
+  internet_max_bandwidth_out  = local.allocate_public_ip == true ? var.internet_max_bandwidth_out : 0
+  description                 = "An ECS instance used to deploy Wordpress."
 
   resource_group_id           = var.resource_group_id
   deletion_protection         = var.deletion_protection
@@ -40,7 +57,7 @@ resource "alicloud_instance" "this" {
 
 
 resource "alicloud_slb" "this"{
-  count             = var.create_slb == true ? 1 : 0
+  count             = local.create_slb == true ? 1 : 0
   name              = var.slb_name
   address_type      = "internet"
   vswitch_id        = var.vswitch_id
@@ -55,8 +72,8 @@ resource "alicloud_slb" "this"{
 }
 
 resource "alicloud_slb_server_group" "this" {
-  count             = var.create_slb == true ? 1 : 0
-  load_balancer_id  = alicloud_slb.this.*.id[0]
+  count             = local.create_slb == true ? 1 : 0
+  load_balancer_id  = concat(alicloud_slb.this.*.id, [""])[0]
   servers {
     server_ids = alicloud_instance.this.*.id
     port       = 80
@@ -64,17 +81,17 @@ resource "alicloud_slb_server_group" "this" {
 }
 
 resource "alicloud_slb_listener" "this" {
-  count               = var.create_slb == true ? 1 : 0
-  frontend_port       = var.frontend_port
-  load_balancer_id    = alicloud_slb.this.*.id[0]
-  protocol            = var.protocol
-  server_group_id     = alicloud_slb_server_group.this.*.id[0]
+  count               = local.create_slb == true ? 1 : 0
+  frontend_port       = 80
+  load_balancer_id    = concat(alicloud_slb.this.*.id, [""])[0]
+  protocol            = "http"
+  server_group_id     = concat(alicloud_slb_server_group.this.*.id, [""])[0]
 }
 
 resource "alicloud_dns_record" "record" {
-  count       = var.bind_domain == true ? 1 : 0
+  count       = local.bind_domain == true ? 1 : 0
   name        = var.domain_name
   host_record = var.host_record
   type        = var.type
-  value       = alicloud_slb.this.*.address[0]
+  value       = var.create_slb == true ? concat(alicloud_slb.this.*.address, [""])[0] : concat(alicloud_instance.this.*.public_ip, [""])[0]
 }

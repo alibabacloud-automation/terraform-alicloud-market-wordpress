@@ -21,13 +21,11 @@ module "market-wordpress" {
   security_group_ids         = ["sg-45678xxx"]
   vswitch_id                 = "vsw-345678xxx"
   internet_max_bandwidth_out = 50
-  image_id                   = "m-2ze69pmuxxxxxxx"
+  create_slb                 = true
+  bind_domain                = true
   slb_name                   = "slb_wordpress"
-  internal                   = true
   bandwidth                  = 5
   spec                       = "slb.s1.small"
-  frontend_port              = 80
-  protocol                   = "http"
   domain_name                = "cloudxxxx.xxx"
   host_record                = "wordpress"
   type                       = "A"
@@ -41,6 +39,12 @@ module "market-wordpress" {
 ## 注意事项
 
 * 本 Module 使用的 AccessKey 和 SecretKey 可以直接从 `profile` 和 `shared_credentials_file` 中获取。如果未设置，可通过下载安装 [aliyun-cli](https://github.com/aliyun/aliyun-cli#installation) 后进行配置。
+
+提交问题
+------
+如果在使用该 Terraform Module 的过程中有任何问题，可以直接创建一个 [Provider Issue](https://github.com/terraform-providers/terraform-provider-alicloud/issues/new)，我们将根据问题描述提供解决方案。
+
+**注意:** 不建议在该 Module 仓库中直接提交 Issue。
 
 作者
 -------
