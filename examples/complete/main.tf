@@ -29,14 +29,11 @@ module "terraform-alicloud-market-wordpress" {
   security_group_ids         = [module.security_group.this_security_group_id]
   vswitch_id                 = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
   internet_max_bandwidth_out = 50
-  image_id                   = "m-2ze69pmuqqu88qn5h47u"
   create_slb                 = true
   bind_domain                = true
   slb_name                   = "slb_wordpress"
   bandwidth                  = 5
   spec                       = "slb.s1.small"
-  frontend_port              = 80
-  protocol                   = "http"
   domain_name                = "cloudxxxx.xxx"
   host_record                = "wordpress"
   type                       = "A"
