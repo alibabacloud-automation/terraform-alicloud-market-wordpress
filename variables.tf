@@ -69,6 +69,7 @@ variable "system_disk_size" {
   type        = number
   default     = 40
 }
+
 variable "security_group_ids" {
   description = "A list of security group ids to associate with ECS Instance."
   type        = list(string)

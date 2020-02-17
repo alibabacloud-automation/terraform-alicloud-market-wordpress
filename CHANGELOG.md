@@ -2,6 +2,8 @@
 
 IMPROVEMENTS：
 
+- Add variable description [GH-4]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/4)
+
 - Supplement whether to create resources and their relationships by switches [GH-3]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/3)
 
 - Add backend servers (ECS instance) to the SLB and Associate DNS with SLB [GH-2]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/2)
