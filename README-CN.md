@@ -5,14 +5,17 @@ terraform-alicloud-market-wordpress
 
 ## Terraform 版本
 
-本模板要求使用版本 Terraform 0.12 和 阿里云 Provider 1.56.0+。
+本模板要求使用版本 Terraform 0.12 和 阿里云 Provider 1.72.0+。
 
 ## 用法
 
 ```hcl
 module "market-wordpress" {
-  source                     = "terraform-alicloud-modules/market-wordpress/alicloud"
-  region                     = "cn-beijing"
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
 
   ecs_instance_name          = "wordpress-instance"
   ecs_instance_password      = "YourPassword123"
@@ -34,7 +37,7 @@ module "market-wordpress" {
 
 ## 示例
 
-* [在 ECS 上启动 Wordpress 示例](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/tree/master/examples/complete)
+* [Wordpress 完整示例](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/tree/master/examples/complete)
 
 ## 注意事项
 

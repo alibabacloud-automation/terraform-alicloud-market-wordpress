@@ -20,8 +20,8 @@ data "alicloud_instance_types" "this" {
   availability_zone = data.alicloud_vswitches.default.vswitches.0.zone_id
 }
 
-module "terraform-alicloud-market-wordpress" {
-  source = "../.."
+module "market-wordpress" {
+  source                     = "../.."
   ecs_instance_name          = "wordpress-instance"
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = data.alicloud_instance_types.this.ids.0
