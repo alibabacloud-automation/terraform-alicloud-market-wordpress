@@ -25,8 +25,20 @@ variable "skip_region_validation" {
 variable "product_keyword" {
   description = "The name keyword of Market Product used to fetch the specified product image."
   type        = string
-  default     = "Wordpress平台"
+  default     = "Wordpress"
 }
+
+variable "product_supplier_name_keyword" {
+  description = "The name keyword of Market Product supplier name used to fetch the specified product image."
+  type        = string
+  default     = ""
+}
+variable "product_suggested_price" {
+  description = "The suggested price of Market Product used to fetch the specified product image."
+  type        = string
+  default     = 0
+}
+
 
 // ECS instance
 variable "create_instance" {

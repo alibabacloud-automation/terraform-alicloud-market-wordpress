@@ -4,11 +4,6 @@ output "this_vswitch_id" {
   value       = concat(alicloud_instance.this.*.vswitch_id, [""])[0]
 }
 
-output "this_vswitch_description" {
-  description = "The description of vswitch."
-  value       = concat(alicloud_instance.this.*.description, [""])[0]
-}
-
 # Security Group outputs
 output "this_security_group_ids" {
   description = "A list of security group ids to associate with."
@@ -18,7 +13,7 @@ output "this_security_group_ids" {
 # ECS Instance outputs
 output "this_ecs_instance_image_id" {
   description = "The ID of the image used to launch the instance."
-  value = concat(alicloud_instance.this.*.image_id, [""])[0]
+  value       = concat(alicloud_instance.this.*.image_id, [""])[0]
 }
 
 output "this_ecs_instance_instance_type" {

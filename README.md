@@ -8,14 +8,17 @@ Terraform Module used to create ECS Instance based on Alibaba Cloud market place
 
 ## Terraform versions
 
-This module requires Terraform 0.12 and Terraform Provider AliCloud 1.56.0+.
+This module requires Terraform 0.12 and Terraform Provider AliCloud 1.72.0+.
 
 ## Usage
 
 ```hcl
 module "market-wordpress" {
-  source                     = "terraform-alicloud-modules/market-wordpress/alicloud"
-  region                     = "cn-beijing"
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
 
   ecs_instance_name          = "wordpress-instance"
   ecs_instance_password      = "YourPassword123"
@@ -37,7 +40,7 @@ module "market-wordpress" {
 
 ## Examples
 
-* [install-on-ecs example](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/tree/master/examples/complete)
+* [complete example](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/tree/master/examples/complete)
 
 ## Notes
 
