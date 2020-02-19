@@ -2,6 +2,7 @@
 
 IMPROVEMENTS：
 
+- change type of product_suggested_price to number [GH-6]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/6)
 - support filtering image by supplier and price [GH-5]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/5)
 - Add variable description [GH-4]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/4)
 - Supplement whether to create resources and their relationships by switches [GH-3]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/3)

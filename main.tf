@@ -24,7 +24,7 @@ data "alicloud_market_product" "product" {
 
 locals {
   create_slb         = var.create_instance ? var.create_slb : false
-  allocate_public_ip = var.create_instance == false ? false : local.create_slb == true ? false : var.allocate_public_ip
+  allocate_public_ip = !var.create_instance ? false : local.create_slb == true ? false : var.allocate_public_ip
   bind_domain        = local.create_slb ? var.bind_domain : local.allocate_public_ip ? var.bind_domain : false
 }
 
