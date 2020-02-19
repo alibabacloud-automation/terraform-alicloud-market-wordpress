@@ -35,7 +35,7 @@ variable "product_supplier_name_keyword" {
 }
 variable "product_suggested_price" {
   description = "The suggested price of Market Product used to fetch the specified product image."
-  type        = string
+  type        = number
   default     = 0
 }
 
