@@ -8,9 +8,10 @@ terraform-alicloud-market-wordpress
 本模板要求使用版本 Terraform 0.12 和 阿里云 Provider 1.72.0+。
 
 ## 用法
+使用云市场镜像搭建 Wordpress
 
 ```hcl
-module "market-wordpress" {
+module "market_wordpress_with_ecs" {
   source = "terraform-alicloud-modules/market-wordpress/alicloud"
   region = "cn-beijing"
 
@@ -21,20 +22,71 @@ module "market-wordpress" {
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = "ecs.sn1ne.large"
   system_disk_category       = "cloud_efficiency"
-  security_group_ids         = ["sg-45678xxx"]
-  vswitch_id                 = "vsw-345678xxx"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
   internet_max_bandwidth_out = 50
+  allocate_public_ip         = true
+  data_disks = [
+    {
+      name = "disk-for-wordpress"
+      size = 50
+    }
+  ]
+}  
+```
+
+使用云市场镜像搭建 Wordpress 并为其绑定一个负载均衡器
+
+```hcl
+module "market_wordpress_with_slb" {
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
+
+  ecs_instance_name          = "wordpress-instance"
+  ecs_instance_password      = "YourPassword123"
+  ecs_instance_type          = "ecs.sn1ne.large"
+  system_disk_category       = "cloud_efficiency"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
+
   create_slb                 = true
-  bind_domain                = true
-  slb_name                   = "slb_wordpress"
+  slb_name                   = "for-wordpress"
   bandwidth                  = 5
   spec                       = "slb.s1.small"
+}  
+```
+
+使用云市场镜像搭建 Wordpress 并为其绑定一个负载均衡器和分配一个Dns
+
+```hcl
+module "market_wordpress_with_bind_dns" {
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
+
+  ecs_instance_name          = "wordpress-instance"
+  ecs_instance_password      = "YourPassword123"
+  ecs_instance_type          = "ecs.sn1ne.large"
+  system_disk_category       = "cloud_efficiency"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
+
+  create_slb                 = true
+  slb_name                   = "for-wordpress"
+  bandwidth                  = 5
+  spec                       = "slb.s1.small"
+
+  bind_domain                = true
   domain_name                = "cloudxxxx.xxx"
   host_record                = "wordpress"
   type                       = "A"
 }  
 ```
-
 ## 示例
 
 * [Wordpress 完整示例](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/tree/master/examples/complete)

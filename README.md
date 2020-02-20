@@ -11,9 +11,10 @@ Terraform Module used to create ECS Instance based on Alibaba Cloud market place
 This module requires Terraform 0.12 and Terraform Provider AliCloud 1.72.0+.
 
 ## Usage
+Building the Wordpress using market place image
 
 ```hcl
-module "market-wordpress" {
+module "market_wordpress_with_ecs" {
   source = "terraform-alicloud-modules/market-wordpress/alicloud"
   region = "cn-beijing"
 
@@ -24,14 +25,66 @@ module "market-wordpress" {
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = "ecs.sn1ne.large"
   system_disk_category       = "cloud_efficiency"
-  security_group_ids         = ["sg-45678xxx"]
-  vswitch_id                 = "vsw-345678xxx"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
   internet_max_bandwidth_out = 50
+  allocate_public_ip         = true
+  data_disks = [
+    {
+      name = "disk-for-wordpress"
+      size = 50
+    }
+  ]
+}  
+```
+
+Building the Wordpress using market place image and bind a slb
+
+```hcl
+module "market_wordpress_with_slb" {
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
+
+  ecs_instance_name          = "wordpress-instance"
+  ecs_instance_password      = "YourPassword123"
+  ecs_instance_type          = "ecs.sn1ne.large"
+  system_disk_category       = "cloud_efficiency"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
+
   create_slb                 = true
-  bind_domain                = true
-  slb_name                   = "slb_wordpress"
+  slb_name                   = "for-wordpress"
   bandwidth                  = 5
   spec                       = "slb.s1.small"
+}  
+```
+
+Building the Wordpress using market place image and bind a slb and dns
+
+```hcl
+module "market_wordpress_with_bind_dns" {
+  source = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region = "cn-beijing"
+
+  product_keyword         = "Wordpress"
+  product_suggested_price = 0
+
+  ecs_instance_name          = "wordpress-instance"
+  ecs_instance_password      = "YourPassword123"
+  ecs_instance_type          = "ecs.sn1ne.large"
+  system_disk_category       = "cloud_efficiency"
+  security_group_ids         = ["sg-132txxxxx"]
+  vswitch_id                 = "vsw-32refxxxx"
+
+  create_slb                 = true
+  slb_name                   = "for-wordpress"
+  bandwidth                  = 5
+  spec                       = "slb.s1.small"
+
+  bind_domain                = true
   domain_name                = "cloudxxxx.xxx"
   host_record                = "wordpress"
   type                       = "A"

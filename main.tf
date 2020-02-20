@@ -24,8 +24,9 @@ data "alicloud_market_product" "product" {
 
 locals {
   create_slb         = var.create_instance ? var.create_slb : false
-  allocate_public_ip = !var.create_instance ? false : local.create_slb == true ? false : var.allocate_public_ip
+  allocate_public_ip = ! var.create_instance ? false : local.create_slb == true ? false : var.allocate_public_ip
   bind_domain        = local.create_slb ? var.bind_domain : local.allocate_public_ip ? var.bind_domain : false
+  this_app_url       = var.bind_domain ? format("%s%s", var.host_record != "" ? "${var.host_record}." : "", var.domain_name) : var.create_slb ? format("%s", concat(alicloud_slb.this.*.address, [""])[0]) : var.create_instance ? format("%s", concat(alicloud_instance.this.*.public_ip, [""])[0]) : ""
 }
 
 resource "alicloud_instance" "this" {
@@ -56,6 +57,18 @@ resource "alicloud_instance" "this" {
       Application = "Market-Wordpress"
     }, var.tags,
   )
+  dynamic "data_disks" {
+    for_each = var.data_disks
+    content {
+      name                 = lookup(data_disks.value, "name", )
+      size                 = lookup(data_disks.value, "size", 20)
+      category             = lookup(data_disks.value, "category", "cloud_efficiency")
+      encrypted            = lookup(data_disks.value, "encrypted", null)
+      snapshot_id          = lookup(data_disks.value, "snapshot_id", null)
+      delete_with_instance = lookup(data_disks.value, "delete_with_instance", null)
+      description          = lookup(data_disks.value, "description", null)
+    }
+  }
 }
 
 
@@ -92,10 +105,10 @@ resource "alicloud_slb_listener" "this" {
   server_group_id  = concat(alicloud_slb_server_group.this.*.id, [""])[0]
 }
 
-resource "alicloud_dns_record" "record" {
+resource "alicloud_dns_record" "this" {
   count       = local.bind_domain ? 1 : 0
   name        = var.domain_name
   host_record = var.host_record
   type        = var.type
-  value       = var.create_slb == true ? concat(alicloud_slb.this.*.address, [""])[0] : concat(alicloud_instance.this.*.public_ip, [""])[0]
+  value       = var.create_slb ? concat(alicloud_slb.this.*.address, [""])[0] : concat(alicloud_instance.this.*.public_ip, [""])[0]
 }
