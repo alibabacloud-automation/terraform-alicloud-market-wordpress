@@ -1,14 +1,14 @@
-output "this_ecs_instance_public_ip" {
-  description = "The ecs instance public ip."
-  value       = module.terraform-alicloud-market-wordpress.this_ecs_instance_public_ip
-}
-
-output "this_slb_public_address" {
-  description = "The slb public address."
-  value       = module.terraform-alicloud-market-wordpress.this_slb_public_address
-}
-
-output "this_wordpress_url" {
+output "this_url_of_market_wordpress_with_ecs" {
   description = "The url of wordpress."
-  value       = module.terraform-alicloud-market-wordpress.this_wordpress_url
+  value       = module.market_wordpress_with_ecs.this_wordpress_url
+}
+
+output "this_url_of_market_wordpress_with_slb" {
+  description = "The url of wordpress with creating slb."
+  value       = module.market_wordpress_with_slb.this_wordpress_url
+}
+
+output "this_url_of_market_wordpress_with_bind_dns" {
+  description = "The url of wordpress with binding dns."
+  value       = module.market_wordpress_with_bind_dns.this_wordpress_url
 }
