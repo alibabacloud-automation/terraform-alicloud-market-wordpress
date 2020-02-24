@@ -8,15 +8,16 @@ Terraform Module used to create ECS Instance based on Alibaba Cloud market place
 
 ## Terraform versions
 
-This module requires Terraform 0.12 and Terraform Provider AliCloud 1.72.0+.
+This module requires Terraform 0.12 and Terraform Provider AliCloud 1.71.0+.
 
 ## Usage
 Building the Wordpress using market place image
 
 ```hcl
 module "market_wordpress_with_ecs" {
-  source = "terraform-alicloud-modules/market-wordpress/alicloud"
-  region = "cn-beijing"
+  source  = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region  = "cn-beijing"
+  profile = "Your-Profile-Name"
 
   product_keyword         = "Wordpress"
   product_suggested_price = 0
@@ -42,8 +43,9 @@ Building the Wordpress using market place image and bind a slb
 
 ```hcl
 module "market_wordpress_with_slb" {
-  source = "terraform-alicloud-modules/market-wordpress/alicloud"
-  region = "cn-beijing"
+  source  = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region  = "cn-beijing"
+  profile = "Your-Profile-Name"
 
   product_keyword         = "Wordpress"
   product_suggested_price = 0
@@ -66,8 +68,9 @@ Building the Wordpress using market place image and bind a slb and dns
 
 ```hcl
 module "market_wordpress_with_bind_dns" {
-  source = "terraform-alicloud-modules/market-wordpress/alicloud"
-  region = "cn-beijing"
+  source  = "terraform-alicloud-modules/market-wordpress/alicloud"
+  region  = "cn-beijing"
+  profile = "Your-Profile-Name"
 
   product_keyword         = "Wordpress"
   product_suggested_price = 0

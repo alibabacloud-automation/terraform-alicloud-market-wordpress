@@ -1,9 +1,14 @@
+variable "profile" {
+  default = "default"
+}
+
 variable "region" {
   default = "cn-beijing"
 }
 
 provider "alicloud" {
-  region = var.region
+  region  = var.region
+  profile = var.profile
 }
 
 #############################################################
@@ -29,6 +34,7 @@ data "alicloud_instance_types" "this" {
 module "security_group" {
   source              = "alibaba/security-group/alicloud"
   region              = var.region
+  profile             = var.profile
   vpc_id              = data.alicloud_vpcs.default.ids.0
   name                = "wordpress-1"
   ingress_cidr_blocks = ["0.0.0.0/0"]
@@ -38,6 +44,9 @@ module "security_group" {
 
 module "market_wordpress_with_ecs" {
   source                     = "../.."
+  region                     = var.region
+  profile                    = var.profile
+
   ecs_instance_name          = "wordpress-instance"
   ecs_instance_password      = "YourPassword123"
   ecs_instance_type          = data.alicloud_instance_types.this.ids.0
@@ -58,6 +67,9 @@ module "market_wordpress_with_ecs" {
 // Create a new slb to attach ecs instances
 module "market_wordpress_with_slb" {
   source                = "../.."
+  region                = var.region
+  profile               = var.profile
+
   ecs_instance_name     = "wordpress-instance"
   ecs_instance_password = "YourPassword123"
   ecs_instance_type     = data.alicloud_instance_types.this.ids.0
@@ -74,6 +86,9 @@ module "market_wordpress_with_slb" {
 // Bind a dns domain for this module
 module "market_wordpress_with_bind_dns" {
   source                = "../.."
+  region                = var.region
+  profile               = var.profile
+
   ecs_instance_name     = "wordpress-instance"
   ecs_instance_password = "YourPassword123"
   ecs_instance_type     = data.alicloud_instance_types.this.ids.0

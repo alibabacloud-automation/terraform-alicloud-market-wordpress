@@ -1,4 +1,9 @@
 ## 1.1.0 (Unreleased)
+
+IMPROVEMENTS：
+
+- modify the provider version and add parameter `profile` [GH-9]( https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/9)
+
 ## 1.0.0 (February 24, 2020)
 
 IMPROVEMENTS：
