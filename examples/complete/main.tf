@@ -46,7 +46,7 @@ module "market_wordpress_with_ecs" {
   vswitch_id                 = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
   internet_max_bandwidth_out = 50
 
-  allocate_public_ip         = true
+  allocate_public_ip = true
   data_disks = [
     {
       name = "disk-for-wordpress"
@@ -57,37 +57,37 @@ module "market_wordpress_with_ecs" {
 
 // Create a new slb to attach ecs instances
 module "market_wordpress_with_slb" {
-  source                     = "../.."
-  ecs_instance_name          = "wordpress-instance"
-  ecs_instance_password      = "YourPassword123"
-  ecs_instance_type          = data.alicloud_instance_types.this.ids.0
-  system_disk_category       = "cloud_efficiency"
-  security_group_ids         = [module.security_group.this_security_group_id]
-  vswitch_id                 = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
+  source                = "../.."
+  ecs_instance_name     = "wordpress-instance"
+  ecs_instance_password = "YourPassword123"
+  ecs_instance_type     = data.alicloud_instance_types.this.ids.0
+  system_disk_category  = "cloud_efficiency"
+  security_group_ids    = [module.security_group.this_security_group_id]
+  vswitch_id            = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
 
-  create_slb                 = true
-  slb_name                   = "for-wordpress"
-  bandwidth                  = 5
-  spec                       = "slb.s1.small"
+  create_slb = true
+  slb_name   = "for-wordpress"
+  bandwidth  = 5
+  spec       = "slb.s1.small"
 }
 
 // Bind a dns domain for this module
 module "market_wordpress_with_bind_dns" {
-  source                     = "../.."
-  ecs_instance_name          = "wordpress-instance"
-  ecs_instance_password      = "YourPassword123"
-  ecs_instance_type          = data.alicloud_instance_types.this.ids.0
-  system_disk_category       = "cloud_efficiency"
-  security_group_ids         = [module.security_group.this_security_group_id]
-  vswitch_id                 = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
+  source                = "../.."
+  ecs_instance_name     = "wordpress-instance"
+  ecs_instance_password = "YourPassword123"
+  ecs_instance_type     = data.alicloud_instance_types.this.ids.0
+  system_disk_category  = "cloud_efficiency"
+  security_group_ids    = [module.security_group.this_security_group_id]
+  vswitch_id            = data.alicloud_vpcs.default.vpcs.0.vswitch_ids.0
 
-  create_slb                 = true
-  slb_name                   = "for-wordpress"
-  bandwidth                  = 5
-  spec                       = "slb.s1.small"
+  create_slb = true
+  slb_name   = "for-wordpress"
+  bandwidth  = 5
+  spec       = "slb.s1.small"
 
-  bind_domain                = true
-  domain_name                = "cloudxxxx.xxx"
-  host_record                = "wordpress"
-  type                       = "A"
+  bind_domain = true
+  domain_name = "cloudxxxx.xxx"
+  host_record = "wordpress"
+  type        = "A"
 }
