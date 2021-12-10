@@ -1,4 +1,10 @@
-## 1.1.0 (Unreleased)
+## 1.2.0 (Unreleased)
+## 1.1.0 (December 10, 2021)
+
+ENHANCEMENTS:
+
+- Removes the provider setting and improves the Readme [GH-10](https://github.com/terraform-alicloud-modules/terraform-alicloud-market-wordpress/pull/10)
+
 ## 1.0.1 (February 24, 2020)
 
 IMPROVEMENTS：
